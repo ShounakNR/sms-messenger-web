@@ -111,7 +111,9 @@ export class Messages {
   }
 
   loadMessages() {
-    this.http.get<Message[]>(`${environment.apiUrl}/api/messages`, { withCredentials: true })
+    this.http.get<Message[]>(`${environment.apiUrl}/api/messages`, { withCredentials: true , headers: {
+      'Accept': 'application/json'
+    }})
       .subscribe({
         next: (data) => this.messages.set(data),
         error: () => this.error = 'Failed to load messages'
