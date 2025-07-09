@@ -144,7 +144,9 @@ export class Messages {
       }
     };
 
-    this.http.post(`${environment.apiUrl}/api/messages`, payload, { withCredentials: true })
+    this.http.post(`${environment.apiUrl}/api/messages`, payload, { withCredentials: true, headers: {
+      'Accept': 'application/json'
+    } })
       .subscribe({
         next: () => {
           this.toggleModal();
