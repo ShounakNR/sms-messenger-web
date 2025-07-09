@@ -3,6 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -13,20 +14,43 @@ import { CommonModule } from '@angular/common';
 })
 export class Login {
   username = '';
+  name = '';
+  phone = '';
   password = '';
   error = '';
+  isSignup = false;
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  toggleMode() {
+    this.isSignup = !this.isSignup;
+    this.error = '';
+  }
+
   onSubmit() {
-    const payload = {
-      user: {
-        username: this.username,
-        password: this.password
-      }
+
+    this.error = '';
+
+    const user: any = {
+      password: this.password
     };
 
-    this.http.post('http://localhost:3000/login', payload, { withCredentials: true }).subscribe({
+    if (this.isSignup) {
+      user.name = this.name;
+      user.phone_number = this.phone;
+      user.username = this.username;
+      user.password_confirmation = this.password;
+    } else {
+      user.username = this.username;
+    }
+
+    const payload = { user };
+
+    const url = this.isSignup
+      ? `${environment.apiUrl}/signup`
+      : `${environment.apiUrl}/login`;
+
+    this.http.post(`${url}`, payload, { withCredentials: true }).subscribe({
       next: (res: any) => {
         console.log('Login successful', res);
         this.router.navigate(['/messages']);

@@ -1,41 +1,61 @@
 <div class="min-h-screen flex items-center justify-center bg-white text-black">
-  <form
-    (ngSubmit)="onSubmit()"
-    #loginForm="ngForm"
-    class="w-full max-w-sm bg-white p-8 rounded-xl shadow-lg space-y-6"
-  >
-    <h2 class="text-2xl font-bold text-center">Login</h2>
-
-    <div>
-      <label class="block text-sm font-medium mb-1">Username</label>
-      <input
-        type="text"
-        name="username"
-        [(ngModel)]="username"
-        required
-        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-      />
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium mb-1">Password</label>
-      <input
-        type="password"
-        name="password"
-        [(ngModel)]="password"
-        required
-        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-      />
-    </div>
-
-    <button
-      type="submit"
-      [disabled]="loginForm.invalid"
-      class="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition"
+  <div class="w-full max-w-md border rounded-xl shadow p-6">
+    <form
+      (ngSubmit)="onSubmit()"
+      #loginForm="ngForm"
+      class="w-full max-w-sm bg-white p-8 rounded-xl shadow-lg space-y-6"
     >
-      Login
-    </button>
+      <h2 class="text-2xl font-bold text-center">{{ isSignup ? 'Sign Up' : 'Login' }}</h2>
 
-    <p *ngIf="error" class="text-red-600 text-center">{{ error }}</p>
-  </form>
+      <div *ngIf="isSignup">
+        <label class="block text-sm font-medium">Name</label>
+        <input type="text" [(ngModel)]="name" name="name" required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+      </div>
+
+      <div *ngIf="isSignup">
+        <label class="block text-sm font-medium">Phone Number</label>
+        <input type="text" [(ngModel)]="phone" name="phone" required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Username</label>
+        <input
+          type="text"
+          name="username"
+          [(ngModel)]="username"
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Password</label>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+        />
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid"
+        class="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition"
+      >
+        {{ isSignup ? 'Create Account' : 'Login' }}
+      </button>
+
+      <p *ngIf="error" class="text-red-600 text-center">{{ error }}</p>
+
+    </form>
+    <div class="mt-4 text-sm text-center">
+      <span *ngIf="!isSignup">Don't have an account?</span>
+      <span *ngIf="isSignup">Already have an account?</span>
+      <button (click)="toggleMode()" class="text-blue-600 underline ml-1">{{ isSignup ? 'Login' : 'Sign Up' }}</button>
+    </div>
+  </div>
 </div>

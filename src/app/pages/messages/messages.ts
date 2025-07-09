@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 interface Message {
   id: string;
@@ -110,7 +111,7 @@ export class Messages {
   }
 
   loadMessages() {
-    this.http.get<Message[]>('http://localhost:3000/api/messages', { withCredentials: true })
+    this.http.get<Message[]>(`${environment.apiUrl}/api/messages`, { withCredentials: true })
       .subscribe({
         next: (data) => this.messages.set(data),
         error: () => this.error = 'Failed to load messages'
@@ -141,7 +142,7 @@ export class Messages {
       }
     };
 
-    this.http.post('http://localhost:3000/api/messages', payload, { withCredentials: true })
+    this.http.post(`${environment.apiUrl}/api/messages`, payload, { withCredentials: true })
       .subscribe({
         next: () => {
           this.toggleModal();
@@ -161,7 +162,7 @@ export class Messages {
   }
 
   logout() {
-    this.http.delete('http://localhost:3000/logout', { withCredentials: true })
+    this.http.delete(`${environment.apiUrl}/logout`, { withCredentials: true })
       .subscribe({
         next: () => this.router.navigate(['/login']),
         error: () => this.showToast('Logout failed')
