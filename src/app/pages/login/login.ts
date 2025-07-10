@@ -63,15 +63,24 @@ export class Login {
     this.http.post(`${url}`, payload, { observe: 'response' }).subscribe({
       next: (response) => {
         const token = response.headers.get('Authorization');
-        if (token) {
+        if (!this.isSignup && token) {
           localStorage.setItem('jwt', token);
           console.log(localStorage)
           this.router.navigate(['/messages']);
         }
-        console.log('Login in successful', token)
+
+        if (this.isSignup) {
+          alert('Signed up successfully!')
+          this.isSignup =  false
+          this.name = '';
+          this.phone = '';
+          this.password = '';
+        }
       },
       error: (err) => {
-        this.error = 'Login failed. Please check your credentials.';
+        this.error = this.isSignup
+          ? 'Signup failed. Please try again.'
+          : 'Login failed. Please check your credentials.';
       }
     });
   }
