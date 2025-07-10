@@ -19,23 +19,33 @@ export class Login {
   password = '';
   error = '';
   isSignup = false;
+  formErrors: { phone?: string } = {};
 
   constructor(private http: HttpClient, private router: Router) {}
 
   toggleMode() {
     this.isSignup = !this.isSignup;
     this.error = '';
+    this.formErrors = {};
   }
 
   onSubmit() {
 
     this.error = '';
+    this.formErrors = {};
 
     const user: any = {
       password: this.password
     };
 
     if (this.isSignup) {
+      if (!this.phone.trim()) {
+        this.formErrors.phone = 'Phone number cannot be blank.';
+        return;
+      } else if (!/^\+1\d{10}$/.test(this.phone)){
+        this.formErrors.phone = 'Phone number must be in format like +1234567890.';
+        return;
+      }
       user.name = this.name;
       user.phone_number = this.phone;
       user.username = this.username;

@@ -26,11 +26,6 @@ interface Message {
         <button (click)="logout()" class="absolute top-6 right-6 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Logout</button>
       </div>
 
-      <!-- Toast Notification -->
-      <div *ngIf="toast" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow z-50">
-        {{ toast }}
-      </div>
-
       <!-- Modal -->
       <div *ngIf="showModal()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md">
@@ -136,6 +131,9 @@ export class Messages {
     if (!this.phone.trim()) {
       this.formErrors.phone = 'Phone number cannot be blank.';
       return;
+    } else if (!/^\+1\d{10}$/.test(this.phone)){
+      this.formErrors.phone = 'Phone number must be in format like +1234567890.';
+      return;
     }
 
     const payload = {
@@ -163,8 +161,7 @@ export class Messages {
   }
 
   showToast(message: string) {
-    this.toast = message;
-    setTimeout(() => this.toast = '', 3000);
+    alert(message)
   }
 
   logout() {
