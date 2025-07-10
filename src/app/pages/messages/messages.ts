@@ -111,8 +111,9 @@ export class Messages {
   }
 
   loadMessages() {
-    this.http.get<Message[]>(`${environment.apiUrl}/api/messages`, { withCredentials: true , headers: {
-      'Accept': 'application/json'
+    this.http.get<Message[]>(`${environment.apiUrl}/api/messages`, { headers: {
+      'Accept': 'application/json',
+      Authorization: localStorage.getItem('jwt') || ''
     }})
       .subscribe({
         next: (data) => this.messages.set(data),
@@ -144,8 +145,9 @@ export class Messages {
       }
     };
 
-    this.http.post(`${environment.apiUrl}/api/messages`, payload, { withCredentials: true, headers: {
-      'Accept': 'application/json'
+    this.http.post(`${environment.apiUrl}/api/messages`, payload, { headers: {
+      'Accept': 'application/json',
+      Authorization: localStorage.getItem('jwt') || ''
     } })
       .subscribe({
         next: () => {
@@ -166,11 +168,8 @@ export class Messages {
   }
 
   logout() {
-    this.http.delete(`${environment.apiUrl}/logout`, { withCredentials: true })
-      .subscribe({
-        next: () => this.router.navigate(['/login']),
-        error: () => this.showToast('Logout failed')
-      });
+    localStorage.removeItem('jwt');
+    this.router.navigate(['/login']);
   }
 
   formatTimestamp(dateStr: string): string {

@@ -50,10 +50,15 @@ export class Login {
       ? `${environment.apiUrl}/signup`
       : `${environment.apiUrl}/login`;
 
-    this.http.post(`${url}`, payload, { withCredentials: true }).subscribe({
-      next: (res: any) => {
-        console.log('Login successful', res);
-        this.router.navigate(['/messages']);
+    this.http.post(`${url}`, payload, { observe: 'response' }).subscribe({
+      next: (response) => {
+        const token = response.headers.get('Authorization');
+        if (token) {
+          localStorage.setItem('jwt', token);
+          console.log(localStorage)
+          this.router.navigate(['/messages']);
+        }
+        console.log('Login in successful', token)
       },
       error: (err) => {
         this.error = 'Login failed. Please check your credentials.';
